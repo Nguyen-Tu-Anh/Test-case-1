@@ -14,8 +14,15 @@ foodImg.src = "img/food.png";
 
 // load audio
 
-// create the snake head
+let dead = new Audio();
+let eat = new Audio();
+let sound = new Audio();
 
+dead.src = "audio/dead.mp3";
+eat.src = "audio/eat.mp3";
+sound.src = "audio/love1.wav";
+
+// create the snake head
 let snake = [];
 snake[0] = {
     x: 9 * box,
@@ -23,16 +30,12 @@ snake[0] = {
 }
 
 // create the random food
-
 let food = {
     x: Math.floor(Math.random() * 17 + 1) * box,
     y: Math.floor(Math.random() * 15 + 3) * box
 }
 
-
-// Score variable
 let score = 0;
-
 // Control snake
 
 document.addEventListener("keydown", direction);
@@ -50,9 +53,9 @@ function direction(event) {
     }
 }
 
-
 // draw
 function draw() {
+    sound.play()
     ctx.drawImage(ground, 0, 0);
 
     for (let i = 0; i < snake.length; i++) {
@@ -70,6 +73,8 @@ function draw() {
 
     // if the snake eat food
     if (snakeX === food.x && snakeY === food.y) {
+        eat.play()
+
         score += 1;
         food = {
             x: Math.floor(Math.random() * 17 + 1) * box,
@@ -90,7 +95,6 @@ function draw() {
         return false;
     }
 
-
     // which direction
     if (d === "LEFT") snakeX -= box;
     if (d === "UP") snakeY -= box;
@@ -103,12 +107,15 @@ function draw() {
         x: snakeX,
         y: snakeY
     }
-
     // Game over
 
     if (snakeX < box || snakeX > 17 * box
         || snakeY < 3 * box || snakeY > 17 * box || collision(newHead, snake)) {
-        clearInterval(game)
+        dead.play();
+
+        clearInterval(game);
+
+
         ctx.fillStyle = "white";
         ctx.font = "50px Verdana";
 
@@ -118,22 +125,21 @@ function draw() {
         gradient.addColorStop(1.0, "red");
         ctx.fillStyle = gradient;
         ctx.fillText("Game Over!", 608 / 2, 608 / 2)
+        // ctx.fillText("Replay", 608 / 2, 608 / 1.6)
     }
 
 
     snake.unshift(newHead);
-
     // draw score
     ctx.fillStyle = "red";
     ctx.font = "40px Arial";
     ctx.textAlign = "center"
     ctx.fillText(score, 17 * box, 2.7 * box);
-
 }
-
-
-//call draw function every 150ms
+//call draw function every 100ms
 let game = setInterval(draw, 100);
+
+
 
 
 
