@@ -112,13 +112,12 @@ function draw() {
     if (snakeX < box || snakeX > 17 * box
         || snakeY < 3 * box || snakeY > 17 * box || collision(newHead, snake)) {
         dead.play();
+        sound.pause();
 
         clearInterval(game);
 
 
-        ctx.fillStyle = "white";
         ctx.font = "50px Verdana";
-
         let gradient = ctx.createLinearGradient(0, 0, 608, 0);
         gradient.addColorStop(0, "magenta");
         gradient.addColorStop(0.5, "blue");
@@ -128,7 +127,6 @@ function draw() {
         // ctx.fillText("Replay", 608 / 2, 608 / 1.6)
     }
 
-
     snake.unshift(newHead);
     // draw score
     ctx.fillStyle = "red";
@@ -136,10 +134,6 @@ function draw() {
     ctx.textAlign = "center"
     ctx.fillText(score, 17 * box, 2.7 * box);
 }
+
 //call draw function every 100ms
 let game = setInterval(draw, 100);
-
-
-
-
-
